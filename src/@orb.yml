@@ -1,0 +1,8 @@
+version: 2.1
+
+description: >
+  Automate dynamic security scanning in your build pipeline. A stackhawk.com API key is required.
+
+display:
+  source_url: https://github.com/stackhawk/stackhawk-orb
+  home_url: https://stackhawk.com

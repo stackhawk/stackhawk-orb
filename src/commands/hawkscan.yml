@@ -1,0 +1,64 @@
+description: Run a dynamic security scan of your live application.
+parameters:
+  api_key:
+    description: >
+      Your StackHawk API key. Store your key as an environment variable in CircleCI and pass the variable here.
+    type: string
+    default: "${HAWK_API_KEY}"
+  app_id:
+    description: >
+      Pass the `APP_ID` environment variable to HawkScan. Set `app.applicationId` to `${APP_ID}` in `stackhawk.yml` to
+      use it.
+    type: string
+    default: ""
+  host:
+    description: >
+      Pass the `HOST` environment variable to HawkScan. Set `app.host` to `${HOST}` in `stackhawk.yml` to use it.
+    type: string
+    default: ""
+  color:
+    description: >
+      Set to `true` if you want HawkScan to output in color. Color output may appear garbled in job output screens.
+    type: boolean
+    default: false
+  configuration_files:
+    description: >
+      A list of HawkScan configuration files to load. Defaults to `stackhawk.yml`. To overlay multiple configuration
+      files, separate them with spaces, e.g. `stackhawk1.yml stackhawk2.yml stackhawk3.yml`.
+    type: string
+    default: stackhawk.yml
+  docker_image:
+    description: >
+      The HawkScan container to download. Change this only if recommended by StackHawk Support.
+    type: string
+    default: stackhawk/hawkscan:latest
+  docker_network:
+    description: >
+      Optional Docker named bridge network on which to run the HawkScan container, such as `scan_net`. Defaults to the
+      Docker default bridge named `bridge`.
+    type: string
+    default: bridge
+  auth_endpoint:
+    description: >
+      The authentication endpoint for HawkScan to use when submitting scan results. Change this only if recommended by
+      StackHawk Support.
+    type: string
+    default: https://auth.stackhawk.com
+  results_endpoint:
+    description:
+      The API endpoint for HawkScan to use when submitting scan results. Change this only if recommended by StackHawk
+      Support.
+    type: string
+    default: https://api.stackhawk.com/api/v1
+steps:
+  - run:
+      name: Run HawkScan
+      command: |
+        docker run --network << parameters.docker_network >> --volume $(pwd):/hawk --tty \
+          --env SHAWK_AUTH_ENDPOINT="<< parameters.auth_endpoint >>" \
+          --env SHAWK_RESULTS_ENDPOINT="<< parameters.results_endpoint >>" \
+          --env API_KEY="<< parameters.api_key >>" \
+          --env APP_ID="<< parameters.app_id >>" \
+          --env HOST="<< parameters.host >>" \
+          --env NO_COLOR="<< parameters.color >>" \
+          << parameters.docker_image >> << parameters.configuration_files >>
