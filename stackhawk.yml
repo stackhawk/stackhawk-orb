@@ -1,7 +1,7 @@
 app:
-  applicationId: ${APP_ID}
+  applicationId: ${HAWK_APP_ID}
   env: ${CIRCLE_BRANCH:circleci}
-  host: ${HOST:http://example.com}
+  host: ${HAWK_HOST:http://example.com}
 
 hawk:
   spider:
