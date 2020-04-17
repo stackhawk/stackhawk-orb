@@ -20,7 +20,6 @@ jobs:
       - checkout
       - stackhawk/hawkscan:
           app-id: "${HAWK_APP_ID}"
-          env: "${CIRCLE_BRANCH}"
 
 workflows:
   # This `lint-pack_validate_publish-dev` workflow will run on any commit.
