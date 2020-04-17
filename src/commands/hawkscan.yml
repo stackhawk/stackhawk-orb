@@ -7,15 +7,15 @@ parameters:
     default: "${HAWK_API_KEY}"
   app-id:
     description: >
-      Pass the `APP_ID` environment variable to HawkScan. Set `app.applicationId` to `${HAWK_APP_ID}` in `stackhawk.yml` to
-      use it.
+      Pass the `APP_ID` environment variable to HawkScan. Set `app.applicationId` to `${HAWK_APP_ID}` in `stackhawk.yml`
+      to use it.
     type: string
-    default: "${HAWK_APP_ID}"
+    default: ""
   host:
     description: >
       Pass the `HOST` environment variable to HawkScan. Set `app.host` to `${HAWK_HOST}` in `stackhawk.yml` to use it.
     type: string
-    default: "${HAWK_HOST}"
+    default: ""
   color:
     description: >
       Set to `true` if you want HawkScan to output in color. Color output may appear garbled in job output screens.

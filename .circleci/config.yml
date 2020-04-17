@@ -18,7 +18,8 @@ jobs:
     executor: orb-tools/machine
     steps:
       - checkout
-      - stackhawk/hawkscan
+      - stackhawk/hawkscan:
+          app-id: "${HAWK_APP_ID}"
 
 workflows:
   # This `lint-pack_validate_publish-dev` workflow will run on any commit.
