@@ -53,12 +53,12 @@ parameters:
 steps:
   - run:
       name: Run HawkScan
-      command: |
-        docker run --network << parameters.docker-network >> --volume $(pwd):/hawk --tty \
-          --env SHAWK_AUTH_ENDPOINT="<< parameters.auth-endpoint >>" \
-          --env SHAWK_RESULTS_ENDPOINT="<< parameters.results-endpoint >>" \
-          --env API_KEY="<< parameters.api-key >>" \
-          --env HAWK_APP_ID="<< parameters.app-id >>" \
-          --env HAWK_HOST="<< parameters.host >>" \
-          --env NO_COLOR="<< parameters.color >>" \
+      command: >
+        docker run --network << parameters.docker-network >> --volume $(pwd):/hawk --tty
+          --env SHAWK_AUTH_ENDPOINT="<< parameters.auth-endpoint >>"
+          --env SHAWK_RESULTS_ENDPOINT="<< parameters.results-endpoint >>"
+          --env API_KEY="<< parameters.api-key >>"
+          <<#parameters.app-id>>--env HAWK_APP_ID="<<parameters.app-id>>"<</parameters.app-id>>
+          <<#parameters.host>>--env HAWK_HOST="<< parameters.host >>"<</parameters.host>>
+          --env NO_COLOR="<< parameters.color >>"
           << parameters.docker-image >> << parameters.configuration-files >>
