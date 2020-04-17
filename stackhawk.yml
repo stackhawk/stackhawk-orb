@@ -1,0 +1,8 @@
+app:
+  applicationId: ${HAWK_APP_ID}
+  env: ${CIRCLE_BRANCH:circleci}
+  host: ${HAWK_HOST:http://example.com}
+
+hawk:
+  spider:
+    base: false
