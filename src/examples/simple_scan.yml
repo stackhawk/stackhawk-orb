@@ -1,3 +1,4 @@
+---
 description: |
   This is the simplest form of running a StackHawk scan using the `hawkscan` command. Pass your API key as the
   environment variable, `${HAWK_API_KEY}`, and provide a valid `stackhawk.yml` configuration file at the base of

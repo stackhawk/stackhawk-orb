@@ -1,3 +1,4 @@
+---
 description: >
   Run a scan of a local integration environment, such as a detached docker container, or a background web service.
 
@@ -99,5 +100,5 @@ environment:
 steps:
   - checkout
   - run:
-      name: 🦅 Scan
+      name: HawkScan
       command: shawk <<parameters.configuration-files>>

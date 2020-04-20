@@ -1,5 +1,7 @@
+---
 description: Run a dynamic security scan of your live application.
-parameters: &hawkscan_params
+
+parameters:
   api-key:
     description: >
       Your StackHawk API key. Store your key as an environment variable in CircleCI and pass the variable here.
