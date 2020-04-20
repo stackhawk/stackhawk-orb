@@ -17,7 +17,8 @@ jobs:
   integration-test-1:
     executor: orb-tools/machine
     steps:
-      - checkout
+      - checkout:
+          -
       - stackhawk/hawkscan:
           app-id: "${HAWK_APP_ID}"
           env: "${CIRCLE_BRANCH}"

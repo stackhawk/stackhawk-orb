@@ -11,4 +11,4 @@ usage:
       machine: true
       steps:
         - checkout
-        - stackhawk/hawkscan: {}
+        - stackhawk/hawkscan
