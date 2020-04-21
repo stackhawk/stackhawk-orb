@@ -1,6 +1,6 @@
 ---
 description: >
-  Run a scan of a remote web app. The fastest way to run a scan of a known host.
+  Run a scan of a remote web app. This is the fastest way to run a scan of a known host.
 
 docker:
   - image: <<parameters.docker-image>>

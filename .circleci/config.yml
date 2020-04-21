@@ -13,15 +13,6 @@ parameters:
     type: string
     default: "dev:alpha"
 
-jobs:
-  integration-test-1:
-    executor: orb-tools/machine
-    steps:
-      - checkout
-      - stackhawk/hawkscan:
-          app-id: "${HAWK_APP_ID}"
-          env: "${CIRCLE_BRANCH}"
-
 workflows:
   # This `lint-pack_validate_publish-dev` workflow will run on any commit.
   lint_pack-validate_publish-dev:
@@ -33,12 +24,9 @@ workflows:
           requires:
             - orb-tools/lint
 
-      # release dev version of orb, for testing & possible publishing.
+      # Release dev version of orb, for testing & possible publishing.
       # orb will be published as dev:alpha and dev:${CIRCLE_SHA1:0:7}.
       # requires a CircleCI API token to be stored as CIRCLE_TOKEN (default)
-      # https://circleci.com/docs/2.0/managing-api-tokens
-      # store CIRCLE_TOKEN as a project env var or Contexts resource
-      # if using Contexts, add your context below
       - orb-tools/publish-dev:
           orb-name: stackhawk/stackhawk
           requires:
@@ -58,22 +46,28 @@ workflows:
   integration-tests_prod-release:
     when: << pipeline.parameters.run-integration-tests >>
     jobs:
-      # your integration test jobs go here: essentially, run all your orb's
-      # jobs and commands to ensure they behave as expected. or, run other
-      # integration tests of your choosing
+      # Integration test jobs go here
+#      - hawkscan-remote:
+#          app-id: "${HAWK_APP_ID}"
+#          env: "${CIRCLE_BRANCH}"
 
-      # an example job
-      - integration-test-1
+      - stackhawk/hawkscan-local:
+          app-id: "${HAWK_APP_ID}"
+          env: "${CIRCLE_BRANCH}"
+          docker-network: scan_net
+          steps:
+            - run:
+                name: Create scan_net Network
+                command: docker network create scan_net
+            - run:
+                name: Run Local Test Instance, nginx_test, on the scan_net Network
+                command: docker run --rm --detach --network scan_net --name nginx_test nginx
 
-      # publish a semver version of the orb. relies on
+      # Publish a semver version of the orb. relies on
       # the commit subject containing the text "[semver:patch|minor|major|skip]"
-      # as that will determine whether a patch, minor or major
-      # version will be published or if publishing should
-      # be skipped.
       # e.g. [semver:patch] will cause a patch version to be published.
       - orb-tools/dev-promote-prod-from-commit-subject:
           orb-name: stackhawk/stackhawk
-
           add-pr-comment: false
           fail-if-semver-not-indicated: true
           publish-version-tag: false

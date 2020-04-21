@@ -1,6 +1,6 @@
 ---
 description: >
-  Run a scan of a local integration environment, such as a detached docker container, or a background web service.
+  Run a scan of a local integration environment, such as a detached docker container, or a backgrounded web service.
 
 machine: true
 
@@ -88,20 +88,22 @@ parameters:
       Support.
     type: string
     default: https://api.stackhawk.com/api/v1
+
 steps:
   - checkout
   - steps: <<parameters.steps>>
-  - hawkscan:
-      api-key: <<parameters.api-key>>
-      app-id: <<parameters.app-id>>
-      host: <<parameters.host>>
-      env: <<parameters.env>>
-      username: <<parameters.username>>
-      password: <<parameters.password>>
-      auth-token: <<parameters.auth-token>>
-      color: <<parameters.color>>
-      configuration-files: <<parameters.configuration-files>>
-      docker-image: <<parameters.docker-image>>
-      docker-network: <<parameters.docker-network>>
-      auth-endpoint: <<parameters.auth-endpoint>>
-      results-endpoint: <<parameters.results-endpoint>>
+  - run:
+      name: Run HawkScan
+      command: |
+        docker run --network <<parameters.docker-network>> --volume $(pwd):/hawk --tty
+        --env SHAWK_AUTH_ENDPOINT="<<parameters.auth-endpoint>>"
+        --env SHAWK_RESULTS_ENDPOINT="<<parameters.results-endpoint>>"
+        --env API_KEY="${<<parameters.api-key>>}"
+        --env NO_COLOR="<<parameters.color>>"
+        <<#parameters.app-id>>--env APP_ID="<<parameters.app-id>>"<</parameters.app-id>>
+        <<#parameters.host>>--env HOST="<<parameters.host>>"<</parameters.host>>
+        <<#parameters.env>>--env ENV="<<parameters.env>>"<</parameters.env>>
+        <<#parameters.username>>--env USERNAME="<<parameters.username>>"<</parameters.username>>
+        <<#parameters.password>>--env PASSWORD="<<parameters.password>>"<</parameters.password>>
+        <<#parameters.auth-token>>--env AUTH_TOKEN="<<parameters.auth-token>>"<</parameters.auth-token>>
+        <<parameters.docker-image>> <<parameters.configuration-files>>
