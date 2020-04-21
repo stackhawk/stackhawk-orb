@@ -99,5 +99,6 @@ steps:
   - run:
       name: HawkScan
       command: |
-        export API_KEY="${<<parameters.api-key>>}"
+        echo 'export API_KEY=${<<parameters.api-key>>}' >> ${BASH_ENV}
+        source ${BASH_ENV}
         shawk <<parameters.configuration-files>>
