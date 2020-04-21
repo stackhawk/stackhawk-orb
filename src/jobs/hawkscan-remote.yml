@@ -104,4 +104,6 @@ steps:
       command: "echo API_KEY: ${API_KEY} ; echo HAWK_API_KEY: ${HAWK_API_KEY}"
   - run:
       name: HawkScan
-      command: shawk <<parameters.configuration-files>>
+      command: |
+        export API_KEY="${<<parameters.api-key>>}"
+        shawk <<parameters.configuration-files>>
