@@ -1,0 +1,16 @@
+---
+description: |
+  In this example, we will run a standard HawkScan scan against a target host defined in your `stackhawk.yml`
+  configuration file within your source repository. In your case, this should be an integration environment
+  accessable to CircleCI. In this example, it's just `http://example.com`
+
+  This example assumes you have stored your StackHawk API key as a protected environment variable, HAWK_API_KEY.
+
+usage:
+  version: 2.1
+  orbs:
+    stackhawk: stackhawk/stackhawk@x.y
+  workflows:
+    scan-remote:
+      jobs:
+        - stackhawk/hawkscan-remote

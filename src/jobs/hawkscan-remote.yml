@@ -1,10 +1,16 @@
-description: Run a dynamic security scan of your live application.
+---
+description: >
+  Run a scan of a remote web app. This is the fastest way to run a scan of a known host.
+
+docker:
+  - image: <<parameters.docker-image>>
+
 parameters:
   api-key:
     description: >
       Your StackHawk API key. Store your key as an environment variable in CircleCI and pass the variable here.
-    type: string
-    default: "${HAWK_API_KEY}"
+    type: env_var_name
+    default: "HAWK_API_KEY"
   app-id:
     description: >
       Pass a value to the HawkScan runtime environment variable, `${APP_ID}`. You can use this environment variable in
@@ -78,19 +84,25 @@ parameters:
       Support.
     type: string
     default: https://api.stackhawk.com/api/v1
+
+environment:
+  SHAWK_AUTH_ENDPOINT: "<<parameters.auth-endpoint>>"
+  SHAWK_RESULTS_ENDPOINT: "<<parameters.results-endpoint>>"
+  API_KEY: "<<parameters.api-key>>"
+  NO_COLOR: "<<parameters.color>>"
+  APP_ID: <<#parameters.app-id>>"<<parameters.app-id>>"<</parameters.app-id>>
+  HOST: <<#parameters.host>>"<<parameters.host>>"<</parameters.host>>
+  ENV: <<#parameters.env>>"<<parameters.env>>"<</parameters.env>>
+  USERNAME: <<#parameters.username>>"<<parameters.username>>"<</parameters.username>>
+  PASSWORD: <<#parameters.password>>"<<parameters.password>>"<</parameters.password>>
+  AUTH_TOKEN: <<#parameters.auth-token>>"<<parameters.auth-token>>"<</parameters.auth-token>>
+
+working_directory: /zap/hawk
+
 steps:
+  - checkout
   - run:
-      name: Run HawkScan
-      command: >
-        docker run --network <<parameters.docker-network>> --volume $(pwd):/hawk --tty
-        --env SHAWK_AUTH_ENDPOINT="<<parameters.auth-endpoint>>"
-        --env SHAWK_RESULTS_ENDPOINT="<<parameters.results-endpoint>>"
-        --env API_KEY="<<parameters.api-key>>"
-        --env NO_COLOR="<<parameters.color>>"
-        <<#parameters.app-id>>--env APP_ID="<<parameters.app-id>>"<</parameters.app-id>>
-        <<#parameters.host>>--env HOST="<<parameters.host>>"<</parameters.host>>
-        <<#parameters.env>>--env ENV="<<parameters.env>>"<</parameters.env>>
-        <<#parameters.username>>--env USERNAME="<<parameters.username>>"<</parameters.username>>
-        <<#parameters.password>>--env PASSWORD="<<parameters.password>>"<</parameters.password>>
-        <<#parameters.auth-token>>--env AUTH_TOKEN="<<parameters.auth-token>>"<</parameters.auth-token>>
-        <<parameters.docker-image>> <<parameters.configuration-files>>
+      name: HawkScan
+      command: |
+        export API_KEY="${<<parameters.api-key>>}"
+        shawk <<parameters.configuration-files>>
