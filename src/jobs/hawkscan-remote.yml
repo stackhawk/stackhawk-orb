@@ -97,6 +97,8 @@ environment:
   PASSWORD: <<#parameters.password>>"<<parameters.password>>"<</parameters.password>>
   AUTH_TOKEN: <<#parameters.auth-token>>"<<parameters.auth-token>>"<</parameters.auth-token>>
 
+working_directory: /zap/hawk
+
 steps:
   - checkout
   - run:
