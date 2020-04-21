@@ -47,9 +47,10 @@ workflows:
     when: << pipeline.parameters.run-integration-tests >>
     jobs:
       # Integration test jobs go here
-#      - hawkscan-remote:
-#          app-id: "${HAWK_APP_ID}"
-#          env: "${CIRCLE_BRANCH}"
+      - hawkscan-remote:
+          app-id: "${HAWK_APP_ID}"
+          env: "${CIRCLE_BRANCH}"
+          docker-image: stackhawk/hawkscan:beta
 
       - stackhawk/hawkscan-local:
           app-id: "${HAWK_APP_ID}"
