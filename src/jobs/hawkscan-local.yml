@@ -94,7 +94,7 @@ steps:
   - steps: <<parameters.steps>>
   - run:
       name: Run HawkScan
-      command: |
+      command: >
         docker run --network <<parameters.docker-network>> --volume $(pwd):/hawk --tty
         --env SHAWK_AUTH_ENDPOINT="<<parameters.auth-endpoint>>"
         --env SHAWK_RESULTS_ENDPOINT="<<parameters.results-endpoint>>"
