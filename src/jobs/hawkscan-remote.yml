@@ -80,16 +80,16 @@ parameters:
     default: https://api.stackhawk.com/api/v1
 
 environment:
-  SHAWK_AUTH_ENDPOINT: "<<parameters.auth-endpoint>>"
-  SHAWK_RESULTS_ENDPOINT: "<<parameters.results-endpoint>>"
-  API_KEY: "<<parameters.api-key>>"
-  NO_COLOR: "<<parameters.color>>"
-  APP_ID: <<#parameters.app-id>>"<<parameters.app-id>>"<</parameters.app-id>>
-  HOST: <<#parameters.host>>"<<parameters.host>>"<</parameters.host>>
-  ENV: <<#parameters.env>>"<<parameters.env>>"<</parameters.env>>
-  USERNAME: <<#parameters.username>>"<<parameters.username>>"<</parameters.username>>
-  PASSWORD: <<#parameters.password>>"<<parameters.password>>"<</parameters.password>>
-  AUTH_TOKEN: <<#parameters.auth-token>>"<<parameters.auth-token>>"<</parameters.auth-token>>
+  SHAWK_AUTH_ENDPOINT: <<parameters.auth-endpoint>>
+  SHAWK_RESULTS_ENDPOINT: <<parameters.results-endpoint>>
+  API_KEY: <<parameters.api-key>>
+  NO_COLOR: <<parameters.color>>
+  APP_ID: <<#parameters.app-id>><<parameters.app-id>><</parameters.app-id>>
+  HOST: <<#parameters.host>><<parameters.host>><</parameters.host>>
+  ENV: <<#parameters.env>><<parameters.env>><</parameters.env>>
+  USERNAME: <<#parameters.username>><<parameters.username>><</parameters.username>>
+  PASSWORD: <<#parameters.password>><<parameters.password>><</parameters.password>>
+  AUTH_TOKEN: <<#parameters.auth-token>><<parameters.auth-token>><</parameters.auth-token>>
   REPO_DIR: /home/zap/hawk
 
 working_directory: /home/zap/hawk
