@@ -88,7 +88,7 @@ parameters:
 environment:
   SHAWK_AUTH_ENDPOINT: "<<parameters.auth-endpoint>>"
   SHAWK_RESULTS_ENDPOINT: "<<parameters.results-endpoint>>"
-  API_KEY: $<<parameters.api-key>>
+  API_KEY: "${<<parameters.api-key>>}"
   NO_COLOR: "<<parameters.color>>"
   APP_ID: <<#parameters.app-id>>"<<parameters.app-id>>"<</parameters.app-id>>
   HOST: <<#parameters.host>>"<<parameters.host>>"<</parameters.host>>
@@ -99,6 +99,9 @@ environment:
 
 steps:
   - checkout
+  - run:
+      name: Danger
+      command: "echo API_KEY: ${API_KEY} ; echo HAWK_API_KEY: ${HAWK_API_KEY}"
   - run:
       name: HawkScan
       command: shawk <<parameters.configuration-files>>
