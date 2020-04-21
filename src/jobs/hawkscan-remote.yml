@@ -80,14 +80,6 @@ parameters:
     default: https://api.stackhawk.com/api/v1
 
 environment:
-  SHAWK_AUTH_ENDPOINT: <<parameters.auth-endpoint>>
-  SHAWK_RESULTS_ENDPOINT: <<parameters.results-endpoint>>
-  NO_COLOR: <<parameters.color>>
-  HOST: <<#parameters.host>><<parameters.host>><</parameters.host>>
-  ENV: <<#parameters.env>><<parameters.env>><</parameters.env>>
-  USERNAME: <<#parameters.username>><<parameters.username>><</parameters.username>>
-  PASSWORD: <<#parameters.password>><<parameters.password>><</parameters.password>>
-  AUTH_TOKEN: <<#parameters.auth-token>><<parameters.auth-token>><</parameters.auth-token>>
   REPO_DIR: /home/zap/hawk
 
 working_directory: /home/zap/hawk
@@ -98,6 +90,14 @@ steps:
       name: HawkScan
       command: |
         echo 'export API_KEY=${<<parameters.api-key>>}' >> ${BASH_ENV}
-        <<#parameters.app-id>>echo 'export APP_ID=${<<parameters.app-id>>}' >> ${BASH_ENV}<</parameters.app-id>>
+        echo 'export SHAWK_AUTH_ENDPOINT=${<<parameters.auth-endpoint>>}' >> ${BASH_ENV}
+        echo 'export SHAWK_RESULTS_ENDPOINT=${<<parameters.results-endpoint>>}' >> ${BASH_ENV}
+        echo 'export NO_COLOR=${<<parameters.color>>}' >> ${BASH_ENV}
+        <<#parameters.app-id>>echo 'export APP_ID=<<parameters.app-id>>' >> ${BASH_ENV}<</parameters.app-id>>
+        <<#parameters.host>>echo 'export HOST=<<parameters.host>>' >> ${BASH_ENV}<</parameters.host>>
+        <<#parameters.env>>echo 'export ENV=<<parameters.env>>' >> ${BASH_ENV}<</parameters.env>>
+        <<#parameters.username>>echo 'export USERNAME=<<parameters.username>>' >> ${BASH_ENV}<</parameters.username>>
+        <<#parameters.password>>echo 'export PASSWORD=<<parameters.password>>' >> ${BASH_ENV}<</parameters.password>>
+        <<#parameters.auth-token>>echo 'export AUTH_TOKEN=<<parameters.auth-token>>' >> ${BASH_ENV}<</parameters.auth-token>>
         source ${BASH_ENV}
         shawk <<parameters.configuration-files>>
