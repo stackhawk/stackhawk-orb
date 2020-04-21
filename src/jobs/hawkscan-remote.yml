@@ -82,9 +82,7 @@ parameters:
 environment:
   SHAWK_AUTH_ENDPOINT: <<parameters.auth-endpoint>>
   SHAWK_RESULTS_ENDPOINT: <<parameters.results-endpoint>>
-  API_KEY: <<parameters.api-key>>
   NO_COLOR: <<parameters.color>>
-  APP_ID: <<#parameters.app-id>><<parameters.app-id>><</parameters.app-id>>
   HOST: <<#parameters.host>><<parameters.host>><</parameters.host>>
   ENV: <<#parameters.env>><<parameters.env>><</parameters.env>>
   USERNAME: <<#parameters.username>><<parameters.username>><</parameters.username>>
@@ -100,5 +98,6 @@ steps:
       name: HawkScan
       command: |
         echo 'export API_KEY=${<<parameters.api-key>>}' >> ${BASH_ENV}
+        <<#parameters.app-id>>echo 'export APP_ID=${<<parameters.app-id>>}' >> ${BASH_ENV}<</parameters.app-id>>
         source ${BASH_ENV}
         shawk <<parameters.configuration-files>>
