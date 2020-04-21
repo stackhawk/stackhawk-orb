@@ -48,14 +48,16 @@ workflows:
     jobs:
       # Integration test jobs go here
       - stackhawk/hawkscan-remote:
-          app-id: "${HAWK_APP_ID}"
+          app-id: 640b8e32-2682-42f9-9a5c-78cc746e3284
           env: "${CIRCLE_BRANCH}"
+          host: http://example.com
           docker-image: stackhawk/hawkscan:beta
 
       - stackhawk/hawkscan-local:
-          app-id: "${HAWK_APP_ID}"
+          app-id: c75c2985-e8eb-4243-9d73-7c9a2c10807f
           env: "${CIRCLE_BRANCH}"
           docker-network: scan_net
+          host: http://nginx_test
           steps:
             - run:
                 name: Create scan_net Network

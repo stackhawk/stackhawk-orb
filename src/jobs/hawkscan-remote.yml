@@ -90,9 +90,9 @@ steps:
       name: HawkScan
       command: |
         echo 'export API_KEY=${<<parameters.api-key>>}' >> ${BASH_ENV}
-        echo 'export SHAWK_AUTH_ENDPOINT=${<<parameters.auth-endpoint>>}' >> ${BASH_ENV}
-        echo 'export SHAWK_RESULTS_ENDPOINT=${<<parameters.results-endpoint>>}' >> ${BASH_ENV}
-        echo 'export NO_COLOR=${<<parameters.color>>}' >> ${BASH_ENV}
+        echo 'export SHAWK_AUTH_ENDPOINT=<<parameters.auth-endpoint>>' >> ${BASH_ENV}
+        echo 'export SHAWK_RESULTS_ENDPOINT=<<parameters.results-endpoint>>' >> ${BASH_ENV}
+        echo 'export NO_COLOR=<<parameters.color>>' >> ${BASH_ENV}
         <<#parameters.app-id>>echo 'export APP_ID=<<parameters.app-id>>' >> ${BASH_ENV}<</parameters.app-id>>
         <<#parameters.host>>echo 'export HOST=<<parameters.host>>' >> ${BASH_ENV}<</parameters.host>>
         <<#parameters.env>>echo 'export ENV=<<parameters.env>>' >> ${BASH_ENV}<</parameters.env>>
