@@ -88,7 +88,7 @@ parameters:
 environment:
   SHAWK_AUTH_ENDPOINT: "<<parameters.auth-endpoint>>"
   SHAWK_RESULTS_ENDPOINT: "<<parameters.results-endpoint>>"
-  API_KEY: "${<<parameters.api-key>>}"
+  API_KEY: "<<parameters.api-key>>"
   NO_COLOR: "<<parameters.color>>"
   APP_ID: <<#parameters.app-id>>"<<parameters.app-id>>"<</parameters.app-id>>
   HOST: <<#parameters.host>>"<<parameters.host>>"<</parameters.host>>
