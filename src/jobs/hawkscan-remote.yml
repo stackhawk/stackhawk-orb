@@ -97,11 +97,10 @@ environment:
   PASSWORD: <<#parameters.password>>"<<parameters.password>>"<</parameters.password>>
   AUTH_TOKEN: <<#parameters.auth-token>>"<<parameters.auth-token>>"<</parameters.auth-token>>
 
+working_directory: /hawk
+
 steps:
   - checkout
-  - run:
-      name: Danger
-      command: "echo API_KEY: ${API_KEY} ; echo HAWK_API_KEY: ${HAWK_API_KEY}"
   - run:
       name: HawkScan
       command: |
