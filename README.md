@@ -7,9 +7,9 @@ The CircleCI Orb [`stackhawk/stackhawk`](https://circleci.com/orbs/registry/orb/
 ## About StackHawk
 [StackHawk](https://stackhawk.com) provides dynamic application vulnerability scanning from development to production.
 
-  * ⚡ Dynamic Application Scanning: Use HawkScan for dynamic vulnerability scanning of your web apps. Think of it as continuous pen testing or security integration testing. Get started with your first scan in minutes.
+  * ⚡ Dynamic Application Scanning: Use HawkScan to find and fix security bugs in your web apps, before you push to production. Think of it as security integration testing. [Get started](https://docs.stackhawk.com/hawkscan/getting-started.html) with your first scan in minutes.
   * 🦸‍ ️Built for Modern Dev Teams: Automate scans with Docker commands, manage configs via YAML, and add app scanning as a build stage. We're built for dev teams that care about security and quality.
-  * 🧰 Vulnerability Management: (coming soon!) Document for compliance. Prioritize and manage fixes with integrations to existing ticketing tools. No more quarterly pen test PDFs - there is a better way.
+  * 🧰 Vulnerability Management: (coming soon!) Document for compliance. Prioritize and manage fixes with integrations to existing ticketing tools. Point in time assements are a thing of the past - there is a better way.
 
 Use the HawkScan command line tool to run application scans manually or through automation. Use the stackhawk/stackhawk Orb to make it simple to run it in CircleCI.
 
