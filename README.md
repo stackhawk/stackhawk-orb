@@ -21,3 +21,4 @@ To scan your application, you will need a `stackhawk.yml` configuration file in 
 
 ## KAAKAWW!
 That is all.
+ 
