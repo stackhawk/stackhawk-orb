@@ -2,7 +2,7 @@
 
 # 🦅 StackHawk CircleCI Orb
 
-The CircleCI Orb, [`stackhawk/stackhawk`](https://circleci.com/orbs/registry/orb/stackhawk/stackhawk), which makes it easy to integrate StackHawk into your continuous integration pipeline.
+The CircleCI Orb, [`stackhawk/stackhawk`](https://circleci.com/orbs/registry/orb/stackhawk/stackhawk) makes it easy to integrate StackHawk into your continuous integration pipeline.
 
 ## About StackHawk
 [StackHawk](https://stackhawk.com) provides dynamic application vulnerability scanning from development to production.
@@ -17,4 +17,7 @@ Use the HawkScan command line tool to run application scans manually or through 
 To use this Orb, you must have a StackHawk API key. [Sign up](https://stackhawk.com) to get yours.
 
 ## Configure HawkScan
-To start scanning your application, create a `stackhawk.yml` configuration file in your application source repository. [Read the docs](https://docs.stackhawk.com/) for more details.
+To scan your application, you will need a `stackhawk.yml` configuration file in your application source repository. [Read the docs](https://docs.stackhawk.com/) for more details.
+
+## KAAKAWW!
+That is all.
