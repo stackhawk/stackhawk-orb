@@ -2,7 +2,7 @@
 
 # 🦅 StackHawk CircleCI Orb
 
-The CircleCI Orb, [`stackhawk/stackhawk`](https://circleci.com/orbs/registry/orb/stackhawk/stackhawk) makes it easy to integrate StackHawk into your continuous integration pipeline.
+The CircleCI Orb [`stackhawk/stackhawk`](https://circleci.com/orbs/registry/orb/stackhawk/stackhawk) makes it easy to integrate StackHawk into your continuous integration pipeline.
 
 ## About StackHawk
 [StackHawk](https://stackhawk.com) provides dynamic application vulnerability scanning from development to production.

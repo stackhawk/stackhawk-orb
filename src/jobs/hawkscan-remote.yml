@@ -13,7 +13,8 @@ docker:
 parameters:
   api-key:
     description: >
-      Your StackHawk API key. Store your key as an environment variable in CircleCI and pass the variable here.
+      Your StackHawk API key. Store your key as an environment variable in CircleCI and pass the name of the variable
+      here.
     type: env_var_name
     default: "HAWK_API_KEY"
   configuration-files:
