@@ -1,6 +1,11 @@
 ---
 description: >
-  Run a scan of a remote web app. This is the fastest way to run a scan of a known host.
+  This is the fastest way to run a scan of a known remote host.
+
+  This job requires a StackHawk API key to be stored as HAWK_API_KEY (default).
+
+  If you want to stand up a simple integration test locally, in the CircleCI build environment, you should use the
+  stackhawk/hawkscan-local job instead.
 
 docker:
   - image: <<parameters.docker-image>>
@@ -19,39 +24,39 @@ parameters:
     default: stackhawk.yml
   app-id:
     description: >
-      Pass a value to the HawkScan runtime environment variable, `${APP_ID}`. You can use this environment variable in
+      Pass a value to the HawkScan runtime environment variable, APP_ID. You can use this environment variable in
       your HawkScan configuration file to dynamically set `app.applicationId`, or any other parameter.
     type: string
     default: ""
   host:
     description: >
-      Pass a value to the HawkScan runtime environment variable, `${HOST}`. You can use this environment variable in
+      Pass a value to the HawkScan runtime environment variable, HOST. You can use this environment variable in
       your HawkScan configuration file to dynamically set `app.host`, or any other parameter.
     type: string
     default: ""
   env:
     description: >
-      Pass a value to the HawkScan runtime environment variable, `${ENV}`. You can use this environment variable in
+      Pass a value to the HawkScan runtime environment variable, ENV. You can use this environment variable in
       your HawkScan configuration file to dynamically set `app.env`, or any other parameter.
     type: string
     default: ""
   username:
     description: >
-      Pass a value to the HawkScan runtime environment variable, `${USERNAME}`. You can use this environment variable in
+      Pass a value to the HawkScan runtime environment variable, USERNAME. You can use this environment variable in
       your HawkScan configuration file to dynamically set `app.authentication.usernamePassword.scanUsername`, or any
       other parameter.
     type: string
     default: ""
   password:
     description: >
-      Pass a value to the HawkScan runtime environment variable, `${PASSWORD}`. You can use this environment variable in
+      Pass a value to the HawkScan runtime environment variable, PASSWORD. You can use this environment variable in
       your HawkScan configuration file to dynamically set `app.authentication.usernamePassword.scanPassword`, or any
       other parameter.
     type: string
     default: ""
   auth-token:
     description: >
-      Pass a value to the HawkScan runtime environment variable, `${AUTH_TOKEN}`. You can use this environment variable in
+      Pass a value to the HawkScan runtime environment variable, AUTH_TOKEN. You can use this environment variable in
       your HawkScan configuration file to dynamically set `app.authentication.external.value`, or any
       other parameter.
     type: string
@@ -73,7 +78,7 @@ parameters:
     type: string
     default: https://auth.stackhawk.com
   results-endpoint:
-    description:
+    description: >
       The API endpoint for HawkScan to use when submitting scan results. Change this only if recommended by StackHawk
       Support.
     type: string
