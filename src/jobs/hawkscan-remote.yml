@@ -1,6 +1,11 @@
 ---
 description: >
-  Run a scan of a remote web app. This is the fastest way to run a scan of a known host.
+  This is the fastest way to run a scan of a known remote host.
+
+  This job requires a StackHawk API key to be stored as HAWK_API_KEY (default).
+
+  If you want to stand up a simple integration test locally, in the CircleCI build environment, you should use the
+  stackhawk/hawkscan-local job instead.
 
 docker:
   - image: <<parameters.docker-image>>
@@ -8,44 +13,51 @@ docker:
 parameters:
   api-key:
     description: >
-      Your StackHawk API key. Store your key as an environment variable in CircleCI and pass the variable here.
+      Your StackHawk API key. Store your key as an environment variable in CircleCI and pass the name of the variable
+      here.
     type: env_var_name
     default: "HAWK_API_KEY"
+  configuration-files:
+    description: >
+      A list of HawkScan configuration files to load. Defaults to `stackhawk.yml`. To overlay multiple configuration
+      files, separate them with spaces, e.g. `stackhawk1.yml stackhawk2.yml stackhawk3.yml`.
+    type: string
+    default: stackhawk.yml
   app-id:
     description: >
-      Pass a value to the HawkScan runtime environment variable, `${APP_ID}`. You can use this environment variable in
+      Pass a value to the HawkScan runtime environment variable, APP_ID. You can use this environment variable in
       your HawkScan configuration file to dynamically set `app.applicationId`, or any other parameter.
     type: string
     default: ""
   host:
     description: >
-      Pass a value to the HawkScan runtime environment variable, `${HOST}`. You can use this environment variable in
+      Pass a value to the HawkScan runtime environment variable, HOST. You can use this environment variable in
       your HawkScan configuration file to dynamically set `app.host`, or any other parameter.
     type: string
     default: ""
   env:
     description: >
-      Pass a value to the HawkScan runtime environment variable, `${ENV}`. You can use this environment variable in
+      Pass a value to the HawkScan runtime environment variable, ENV. You can use this environment variable in
       your HawkScan configuration file to dynamically set `app.env`, or any other parameter.
     type: string
     default: ""
   username:
     description: >
-      Pass a value to the HawkScan runtime environment variable, `${USERNAME}`. You can use this environment variable in
+      Pass a value to the HawkScan runtime environment variable, USERNAME. You can use this environment variable in
       your HawkScan configuration file to dynamically set `app.authentication.usernamePassword.scanUsername`, or any
       other parameter.
     type: string
     default: ""
   password:
     description: >
-      Pass a value to the HawkScan runtime environment variable, `${PASSWORD}`. You can use this environment variable in
+      Pass a value to the HawkScan runtime environment variable, PASSWORD. You can use this environment variable in
       your HawkScan configuration file to dynamically set `app.authentication.usernamePassword.scanPassword`, or any
       other parameter.
     type: string
     default: ""
   auth-token:
     description: >
-      Pass a value to the HawkScan runtime environment variable, `${AUTH_TOKEN}`. You can use this environment variable in
+      Pass a value to the HawkScan runtime environment variable, AUTH_TOKEN. You can use this environment variable in
       your HawkScan configuration file to dynamically set `app.authentication.external.value`, or any
       other parameter.
     type: string
@@ -55,23 +67,11 @@ parameters:
       Set to `true` if you want HawkScan to output in color. Color output may appear garbled in job output screens.
     type: boolean
     default: false
-  configuration-files:
-    description: >
-      A list of HawkScan configuration files to load. Defaults to `stackhawk.yml`. To overlay multiple configuration
-      files, separate them with spaces, e.g. `stackhawk1.yml stackhawk2.yml stackhawk3.yml`.
-    type: string
-    default: stackhawk.yml
   docker-image:
     description: >
       The HawkScan container to download. Change this only if recommended by StackHawk Support.
     type: string
     default: stackhawk/hawkscan:latest
-  docker-network:
-    description: >
-      Optional Docker named bridge network on which to run the HawkScan container, such as `scan-net`. Defaults to the
-      Docker default bridge named `bridge`.
-    type: string
-    default: bridge
   auth-endpoint:
     description: >
       The authentication endpoint for HawkScan to use when submitting scan results. Change this only if recommended by
@@ -79,30 +79,31 @@ parameters:
     type: string
     default: https://auth.stackhawk.com
   results-endpoint:
-    description:
+    description: >
       The API endpoint for HawkScan to use when submitting scan results. Change this only if recommended by StackHawk
       Support.
     type: string
     default: https://api.stackhawk.com/api/v1
 
 environment:
-  SHAWK_AUTH_ENDPOINT: "<<parameters.auth-endpoint>>"
-  SHAWK_RESULTS_ENDPOINT: "<<parameters.results-endpoint>>"
-  API_KEY: "<<parameters.api-key>>"
-  NO_COLOR: "<<parameters.color>>"
-  APP_ID: <<#parameters.app-id>>"<<parameters.app-id>>"<</parameters.app-id>>
-  HOST: <<#parameters.host>>"<<parameters.host>>"<</parameters.host>>
-  ENV: <<#parameters.env>>"<<parameters.env>>"<</parameters.env>>
-  USERNAME: <<#parameters.username>>"<<parameters.username>>"<</parameters.username>>
-  PASSWORD: <<#parameters.password>>"<<parameters.password>>"<</parameters.password>>
-  AUTH_TOKEN: <<#parameters.auth-token>>"<<parameters.auth-token>>"<</parameters.auth-token>>
+  REPO_DIR: /home/zap/hawk
 
-working_directory: /zap/hawk
+working_directory: /home/zap/hawk
 
 steps:
   - checkout
   - run:
       name: HawkScan
       command: |
-        export API_KEY="${<<parameters.api-key>>}"
+        echo 'export API_KEY=${<<parameters.api-key>>}' >> ${BASH_ENV}
+        echo 'export SHAWK_AUTH_ENDPOINT=<<parameters.auth-endpoint>>' >> ${BASH_ENV}
+        echo 'export SHAWK_RESULTS_ENDPOINT=<<parameters.results-endpoint>>' >> ${BASH_ENV}
+        echo 'export NO_COLOR=<<parameters.color>>' >> ${BASH_ENV}
+        <<#parameters.app-id>>echo 'export APP_ID=<<parameters.app-id>>' >> ${BASH_ENV}<</parameters.app-id>>
+        <<#parameters.host>>echo 'export HOST=<<parameters.host>>' >> ${BASH_ENV}<</parameters.host>>
+        <<#parameters.env>>echo 'export ENV=<<parameters.env>>' >> ${BASH_ENV}<</parameters.env>>
+        <<#parameters.username>>echo 'export USERNAME=<<parameters.username>>' >> ${BASH_ENV}<</parameters.username>>
+        <<#parameters.password>>echo 'export PASSWORD=<<parameters.password>>' >> ${BASH_ENV}<</parameters.password>>
+        <<#parameters.auth-token>>echo 'export AUTH_TOKEN=<<parameters.auth-token>>' >> ${BASH_ENV}<</parameters.auth-token>>
+        source ${BASH_ENV}
         shawk <<parameters.configuration-files>>

@@ -1,13 +1,16 @@
 ---
 description: |
-  In this example, we will run Nginx as a Docker container to be scanned within the CircleCI
-  build environment. We run the stackhawk/hawkscan-local job with the parameter `docker-network: scan_net` to tell
-  HawkScan to run on the Docker named network, `scan_net`. We also provide the
-  parameter `steps` to 1) create a named Docker bridge network, `scan_net`, and 2) run an nginx container on that
-  network with the name `nginx_test`.
+  In this example, run Nginx as a Docker container and scan it within the CircleCI build environment.
 
-  In our HawkScan configuration, we add our test subject, the nginx container, as `app.host: http://nginx_test`.
-  This example assumes you have stored your StackHawk API key as a protected environment variable, HAWK_API_KEY.
+  Run the `stackhawk/hawkscan-local` job with the parameter `docker-network: scan_net` to tell HawkScan to run on
+  the Docker named network, `scan_net`.
+
+  Provide the parameter `steps` to do the following before the scan runs:
+    1) Create a named Docker bridge network, `scan_net`
+    2) Run an Nginx container on that network with the name `nginx_test`
+
+  The HawkScan configuration is read from our source repository as `./stackhawk.yml`. In that file, the test
+  subject is defined as `app.host=http://nginx_test`.
 
 usage:
   version: 2.1
