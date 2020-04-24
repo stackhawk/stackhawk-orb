@@ -84,18 +84,6 @@ parameters:
       The HawkScan container to download. Change this only if recommended by StackHawk Support.
     type: string
     default: stackhawk/hawkscan:latest
-  auth-endpoint:
-    description: >
-      The authentication endpoint for HawkScan to use when submitting scan results. Change this only if recommended by
-      StackHawk Support.
-    type: string
-    default: https://auth.stackhawk.com
-  results-endpoint:
-    description: >
-      The API endpoint for HawkScan to use when submitting scan results. Change this only if recommended by StackHawk
-      Support.
-    type: string
-    default: https://api.stackhawk.com/api/v1
 
 steps:
   - checkout
@@ -104,8 +92,6 @@ steps:
       name: Run HawkScan
       command: >
         docker run --network <<parameters.docker-network>> --volume $(pwd):/hawk --tty
-        --env SHAWK_AUTH_ENDPOINT="<<parameters.auth-endpoint>>"
-        --env SHAWK_RESULTS_ENDPOINT="<<parameters.results-endpoint>>"
         --env API_KEY="${<<parameters.api-key>>}"
         --env NO_COLOR="<<parameters.color>>"
         <<#parameters.app-id>>--env APP_ID="<<parameters.app-id>>"<</parameters.app-id>>
