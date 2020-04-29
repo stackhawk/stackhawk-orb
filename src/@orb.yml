@@ -2,7 +2,7 @@
 version: 2.1
 
 description: >
-  Automate dynamic application security testing in your pipeline.
+  Automate dynamic application security testing in your pipeline. StackHawk makes it simple for developers to find, triage, and fix application security bugs. Scan your application for AppSec bugs in the code your team wrote, triage and fix with provided documentation, and automate in your pipeline to prevent future bugs from hitting prod.
 
 display:
   source_url: https://github.com/stackhawk/stackhawk-orb
