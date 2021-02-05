@@ -2,7 +2,7 @@ version: 2.1
 
 orbs:
   stackhawk: stackhawk/stackhawk@<<pipeline.parameters.dev-orb-version>>
-  orb-tools: circleci/orb-tools@9.0
+  orb-tools: circleci/orb-tools@10.0.3
 
 parameters:
   # These pipeline parameters are defaults for the "trigger-integration-tests-workflow" job
@@ -49,12 +49,12 @@ workflows:
       # Integration test jobs go here
       - stackhawk/hawkscan-remote:
           app-id: f37328de-189f-4d9a-9b7e-f4ab84583337
-          env: "${CIRCLE_BRANCH}"
+          env: "Development"
           host: http://example.com
 
       - stackhawk/hawkscan-local:
           app-id: 4af3a915-da89-4fe4-bf45-9ce9c9eec9ce
-          env: "${CIRCLE_BRANCH}"
+          env: "Development"
           docker-network: scan_net
           host: http://nginx_test
           steps:
