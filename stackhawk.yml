@@ -1,7 +1,7 @@
 app:
   applicationId: ${APP_ID}
-  env: ${ENV:circleci}
-  host: ${HOST:http://example.com}
+  env: Development
+  host: ${HOST}
 
 hawk:
   spider:
