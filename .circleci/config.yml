@@ -48,12 +48,12 @@ workflows:
     jobs:
       # Integration test jobs go here
       - stackhawk/hawkscan-remote:
-          app-id: 640b8e32-2682-42f9-9a5c-78cc746e3284
+          app-id: f37328de-189f-4d9a-9b7e-f4ab84583337
           env: "${CIRCLE_BRANCH}"
           host: http://example.com
 
       - stackhawk/hawkscan-local:
-          app-id: c75c2985-e8eb-4243-9d73-7c9a2c10807f
+          app-id: 4af3a915-da89-4fe4-bf45-9ce9c9eec9ce
           env: "${CIRCLE_BRANCH}"
           docker-network: scan_net
           host: http://nginx_test
