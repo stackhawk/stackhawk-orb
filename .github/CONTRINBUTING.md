@@ -6,7 +6,7 @@ To build and publish a development version of this orb:
 
 ```shell
 circleci orb validate src/@orb.yml
-circleci orb publish src/@orb.yml stackhawk/stackhawk@dev:alpha
+circleci orb pack src | circleci orb publish - stackhawk/stackhawk@dev:alpha
 ```
 
 ## Publishing a New Orb Version
