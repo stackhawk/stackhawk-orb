@@ -10,6 +10,8 @@ description: |
 docker:
   - image: <<parameters.docker-image>>
 
+resource_class: <<parameters.resource-class>>
+
 parameters:
   api-key:
     description: >
@@ -72,6 +74,11 @@ parameters:
       The HawkScan container to download. Change this only if recommended by StackHawk Support.
     type: string
     default: stackhawk/hawkscan:latest
+  resource-class:
+    description: >
+      Override the default `resource_class` (medium). See https://circleci.com/docs/2.0/configuration-reference/#resourceclass .
+    type: string
+    default: medium
 
 environment:
   REPO_DIR: /home/zap/hawk
