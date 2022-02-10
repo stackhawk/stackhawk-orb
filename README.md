@@ -19,6 +19,9 @@ To use this Orb, you must have a StackHawk API key. [Sign up](https://stackhawk.
 ## Configure HawkScan
 To scan your application, you will need a `stackhawk.yml` configuration file in your application source repository. [Read the docs](https://docs.stackhawk.com/) for more details.
 
+## Need Help?
+If you have questions or need some help, please email us at support@stackhawk.com.
+
 ## KAAKAWW!
 That is all.
  
