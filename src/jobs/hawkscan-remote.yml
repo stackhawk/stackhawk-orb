@@ -81,9 +81,9 @@ parameters:
     default: medium
 
 environment:
-  REPO_DIR: /home/zap/hawk
+  REPO_DIR: /home/steve/hawk
 
-working_directory: /home/zap/hawk
+working_directory: /home/steve/hawk
 
 steps:
   - checkout
