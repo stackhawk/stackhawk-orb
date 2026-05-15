@@ -19,7 +19,6 @@ workflows:
     unless: << pipeline.parameters.run-integration-tests >>
     jobs:
       - orb-tools/pack:
-          org_id: 28509e3e-0495-4852-b501-63862325d80a
           executor:
             name: orb-tools/default
             tag: "0.1.36202"
