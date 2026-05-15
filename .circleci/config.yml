@@ -18,7 +18,8 @@ workflows:
   lint_pack-validate_publish-dev:
     unless: << pipeline.parameters.run-integration-tests >>
     jobs:
-      - orb-tools/pack
+      - orb-tools/pack:
+          org_slug: gh/stackhawk
 
       # Release dev version of orb, for testing & possible publishing.
       # orb will be published as dev:alpha and dev:${CIRCLE_SHA1:0:7}.
@@ -73,6 +74,7 @@ workflows:
           enable_pr_comment: false
           pub_type: production
           vcs_type: gh
+          org_slug: gh/stackhawk
           requires:
             - stackhawk/hawkscan-local
           filters:
