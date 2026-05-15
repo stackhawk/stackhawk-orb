@@ -18,7 +18,8 @@ workflows:
   lint_pack-validate_publish-dev:
     unless: << pipeline.parameters.run-integration-tests >>
     jobs:
-      - orb-tools/pack
+      - orb-tools/pack:
+          org_id: 28509e3e-0495-4852-b501-63862325d80a
 
       # Release dev version of orb, for testing & possible publishing.
       # orb will be published as dev:alpha and dev:${CIRCLE_SHA1:0:7}.
