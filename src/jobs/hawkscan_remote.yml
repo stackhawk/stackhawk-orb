@@ -1,15 +1,16 @@
 ---
 description: |
-  Run a scan of a local integration environment. This job runs on a VM and runs hawkscan from a Docker container on
-  that VM. You may provide a series of steps that result in a service running either natively on localhost, or as a
-  Docker container on a named Docker bridge network, such as `scan_net`.
-
-  If you have an integration environment running in a remote environment, you should use the stackhawk/hawkscan-remote
-  job instead. It's faster without the VM overhead.
+  This is the fastest way to run a scan of a known remote host.
 
   This job requires a StackHawk API key to be stored as HAWK_API_KEY (default).
 
-machine: true
+  If you want to stand up a simple integration test locally, in the CircleCI build environment, you should use the
+  stackhawk/hawkscan_local job instead.
+
+docker:
+  - image: <<parameters.docker-image>>
+
+resource_class: <<parameters.resource-class>>
 
 parameters:
   api-key:
@@ -24,17 +25,6 @@ parameters:
       files, separate them with spaces, e.g. `stackhawk1.yml stackhawk2.yml stackhawk3.yml`.
     type: string
     default: stackhawk.yml
-  docker-network:
-    description: >
-      Optional Docker named bridge network on which to run the HawkScan container, such as `scan-net`. Defaults to the
-      Docker default bridge named `bridge`.
-    type: string
-    default: bridge
-  steps:
-    description: >
-      Any steps you wish to run before starting the scan. This should include starting a service or Docker container
-      that is to be the target of the scan.
-    type: steps
   app-id:
     description: >
       Pass a value to the HawkScan runtime environment variable, APP_ID. You can use this environment variable in
@@ -84,20 +74,30 @@ parameters:
       The HawkScan container to download. Change this only if recommended by StackHawk Support.
     type: string
     default: stackhawk/hawkscan:latest
+  resource-class:
+    description: >
+      Override the default `resource_class` (medium). See
+      https://circleci.com/docs/2.0/configuration-reference/#resourceclass .
+    type: string
+    default: medium
+
+environment:
+  REPO_DIR: /home/steve/hawk
+
+working_directory: /home/steve/hawk
 
 steps:
   - checkout
-  - steps: <<parameters.steps>>
   - run:
-      name: Run HawkScan
-      command: >
-        docker run --network <<parameters.docker-network>> --volume $(pwd):/hawk --tty
-        --env API_KEY="${<<parameters.api-key>>}"
-        --env NO_COLOR="<<parameters.color>>"
-        <<#parameters.app-id>>--env APP_ID="<<parameters.app-id>>"<</parameters.app-id>>
-        <<#parameters.host>>--env HOST="<<parameters.host>>"<</parameters.host>>
-        <<#parameters.env>>--env ENV="<<parameters.env>>"<</parameters.env>>
-        <<#parameters.username>>--env USERNAME="<<parameters.username>>"<</parameters.username>>
-        <<#parameters.password>>--env PASSWORD="<<parameters.password>>"<</parameters.password>>
-        <<#parameters.auth-token>>--env AUTH_TOKEN="<<parameters.auth-token>>"<</parameters.auth-token>>
-        <<parameters.docker-image>> <<parameters.configuration-files>>
+      name: HawkScan
+      environment:
+        SHAWK_API_KEY_NAME: <<parameters.api-key>>
+        SHAWK_NO_COLOR: <<parameters.color>>
+        SHAWK_CONFIG_FILES: <<parameters.configuration-files>>
+        SHAWK_APP_ID: <<parameters.app-id>>
+        SHAWK_HOST: <<parameters.host>>
+        SHAWK_ENV: <<parameters.env>>
+        SHAWK_USERNAME: <<parameters.username>>
+        SHAWK_PASSWORD: <<parameters.password>>
+        SHAWK_AUTH_TOKEN: <<parameters.auth-token>>
+      command: <<include(scripts/scan_remote.sh)>>
