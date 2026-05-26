@@ -1,0 +1,50 @@
+version: 2.1
+
+orbs:
+  stackhawk: {}
+  orb-tools: circleci/orb-tools@12.1.0
+
+filters: &filters
+  tags:
+    only: /.*/
+
+workflows:
+  test-deploy:
+    jobs:
+      # ---- Integration smoke tests against the injected dev orb ----
+      - stackhawk/hawkscan-local:
+          app-id: f11fa0b4-5763-4266-9ef4-786d82817b8b
+          env: "Development"
+          docker-network: scannet
+          host: http://nginxtest
+          filters: *filters
+          steps:
+            - run:
+                name: Create scan_net Network
+                command: docker network create scannet
+            - run:
+                name: Run nginxtest on scannet
+                command: docker run --rm --detach --network scannet --name nginxtest nginx
+      - stackhawk/hawkscan-remote:
+          app-id: 095bcf6b-85ef-4b9b-b512-aae0f10fc344
+          env: "Development"
+          host: http://example.com
+          filters: *filters
+
+      # ---- Re-pack from source so publish has the orb file ----
+      - orb-tools/pack:
+          filters: *filters
+
+      # ---- Production publish (semver from commit subject), master only ----
+      - orb-tools/publish:
+          orb_name: stackhawk/stackhawk
+          vcs_type: gh
+          pub_type: production
+          enable_pr_comment: false
+          requires:
+            - stackhawk/hawkscan-local
+            - stackhawk/hawkscan-remote
+            - orb-tools/pack
+          filters:
+            branches:
+              only: master
