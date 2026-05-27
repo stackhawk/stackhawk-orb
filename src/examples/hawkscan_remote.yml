@@ -13,7 +13,7 @@ description: |
 usage:
   version: 2.1
   orbs:
-    stackhawk: stackhawk/stackhawk@x.y
+    stackhawk: stackhawk/stackhawk@2.0.0
   workflows:
     scan-remote:
       jobs:
