@@ -39,7 +39,9 @@ workflows:
       - orb-tools/pack:
           filters: *filters
 
-      # ---- Production publish (semver from commit subject), master only ----
+      # ---- Production publish, triggered by pushing a vX.Y.Z tag ----
+      # orb-tools 12.x publishes the version from the git tag, so this runs on
+      # tags only (never on branch pushes). Release by pushing e.g. v2.0.0.
       - orb-tools/publish:
           orb_name: stackhawk/stackhawk
           vcs_type: gh
@@ -51,4 +53,6 @@ workflows:
             - orb-tools/pack
           filters:
             branches:
-              only: master
+              ignore: /.*/
+            tags:
+              only: /^v[0-9]+\.[0-9]+\.[0-9]+$/
