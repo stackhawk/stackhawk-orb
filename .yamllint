@@ -1,0 +1,9 @@
+# yamllint config for the StackHawk orb source.
+# 80 columns is impractical for orb prose (descriptions, usage examples), so
+# raise the line-length limit; everything else uses yamllint defaults.
+extends: default
+
+rules:
+  line-length:
+    max: 120
+    level: error

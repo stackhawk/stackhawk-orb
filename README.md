@@ -19,6 +19,29 @@ To use this Orb, you must have a StackHawk API key. [Sign up](https://stackhawk.
 ## Configure HawkScan
 To scan your application, you will need a `stackhawk.yml` configuration file in your application source repository. [Read the docs](https://docs.stackhawk.com/) for more details.
 
+## Upgrading to v2.0.0 (breaking changes)
+
+Version 2.0.0 renames the orb's jobs and parameters to `snake_case` to follow
+CircleCI orb conventions. Job *behavior* is unchanged — only the names. Update
+your `.circleci/config.yml` when upgrading:
+
+| Before (1.x) | After (2.0.0) |
+| --- | --- |
+| `stackhawk/hawkscan-local` | `stackhawk/hawkscan_local` |
+| `stackhawk/hawkscan-remote` | `stackhawk/hawkscan_remote` |
+| `api-key` | `api_key` |
+| `configuration-files` | `configuration_files` |
+| `docker-network` | `docker_network` |
+| `app-id` | `app_id` |
+| `auth-token` | `auth_token` |
+| `docker-image` | `docker_image` |
+| `resource-class` | `resource_class` |
+
+(`host`, `env`, `username`, `password`, `color`, and `steps` are unchanged.)
+
+See [`MIGRATION.md`](MIGRATION.md) for the full 1.x → 2.0.0 migration guide and
+[`CHANGELOG.md`](CHANGELOG.md) for release notes.
+
 ## Need Help?
 If you have questions or need some help, please email us at support@stackhawk.com.
 

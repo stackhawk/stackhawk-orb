@@ -4,7 +4,7 @@ description: |
   that VM. You may provide a series of steps that result in a service running either natively on localhost, or as a
   Docker container on a named Docker bridge network, such as `scan_net`.
 
-  If you have an integration environment running in a remote environment, you should use the stackhawk/hawkscan-remote
+  If you have an integration environment running in a remote environment, you should use the stackhawk/hawkscan_remote
   job instead. It's faster without the VM overhead.
 
   This job requires a StackHawk API key to be stored as HAWK_API_KEY (default).
@@ -12,19 +12,19 @@ description: |
 machine: true
 
 parameters:
-  api-key:
+  api_key:
     description: >
       Your StackHawk API key. Store your key as an environment variable in CircleCI and pass the name of the variable
       here.
     type: env_var_name
     default: "HAWK_API_KEY"
-  configuration-files:
+  configuration_files:
     description: >
       A list of HawkScan configuration files to load. Defaults to `stackhawk.yml`. To overlay multiple configuration
       files, separate them with spaces, e.g. `stackhawk1.yml stackhawk2.yml stackhawk3.yml`.
     type: string
     default: stackhawk.yml
-  docker-network:
+  docker_network:
     description: >
       Optional Docker named bridge network on which to run the HawkScan container, such as `scan-net`. Defaults to the
       Docker default bridge named `bridge`.
@@ -35,7 +35,7 @@ parameters:
       Any steps you wish to run before starting the scan. This should include starting a service or Docker container
       that is to be the target of the scan.
     type: steps
-  app-id:
+  app_id:
     description: >
       Pass a value to the HawkScan runtime environment variable, APP_ID. You can use this environment variable in
       your HawkScan configuration file to dynamically set `app.applicationId`, or any other parameter.
@@ -67,7 +67,7 @@ parameters:
       other parameter.
     type: string
     default: ""
-  auth-token:
+  auth_token:
     description: >
       Pass a value to the HawkScan runtime environment variable, AUTH_TOKEN. You can use this environment variable in
       your HawkScan configuration file to dynamically set `app.authentication.external.value`, or any
@@ -79,25 +79,50 @@ parameters:
       Set to `true` if you want HawkScan to output in color. Color output may appear garbled in job output screens.
     type: boolean
     default: false
-  docker-image:
+  docker_image:
     description: >
       The HawkScan container to download. Change this only if recommended by StackHawk Support.
     type: string
     default: stackhawk/hawkscan:latest
+  commit_sha_check:
+    description: >
+      If `true`, check the StackHawk platform for an existing scan tagged with the current commit SHA
+      (CIRCLE_SHA1) before scanning, and skip the scan if one is found. Requires `organization_id` and
+      a `_STACKHAWK_GIT_COMMIT_SHA: ${CIRCLE_SHA1}` tag in your stackhawk.yml.
+    type: boolean
+    default: false
+  organization_id:
+    description: >
+      Your StackHawk organization ID. Required when `commit_sha_check` is `true` (used for the scan lookup).
+    type: string
+    default: ""
 
 steps:
   - checkout
+  - when:
+      condition: <<parameters.commit_sha_check>>
+      steps:
+        - run:
+            name: Commit SHA check
+            environment:
+              SHAWK_ORG_ID: <<parameters.organization_id>>
+              SHAWK_API_KEY_NAME: <<parameters.api_key>>
+              SHAWK_APP_ID: <<parameters.app_id>>
+              SHAWK_CONFIG_FILES: <<parameters.configuration_files>>
+            command: <<include(scripts/sha_check.sh)>>
   - steps: <<parameters.steps>>
   - run:
       name: Run HawkScan
-      command: >
-        docker run --network <<parameters.docker-network>> --volume $(pwd):/hawk --tty
-        --env API_KEY="${<<parameters.api-key>>}"
-        --env NO_COLOR="<<parameters.color>>"
-        <<#parameters.app-id>>--env APP_ID="<<parameters.app-id>>"<</parameters.app-id>>
-        <<#parameters.host>>--env HOST="<<parameters.host>>"<</parameters.host>>
-        <<#parameters.env>>--env ENV="<<parameters.env>>"<</parameters.env>>
-        <<#parameters.username>>--env USERNAME="<<parameters.username>>"<</parameters.username>>
-        <<#parameters.password>>--env PASSWORD="<<parameters.password>>"<</parameters.password>>
-        <<#parameters.auth-token>>--env AUTH_TOKEN="<<parameters.auth-token>>"<</parameters.auth-token>>
-        <<parameters.docker-image>> <<parameters.configuration-files>>
+      environment:
+        SHAWK_API_KEY_NAME: <<parameters.api_key>>
+        SHAWK_NO_COLOR: <<parameters.color>>
+        SHAWK_DOCKER_NETWORK: <<parameters.docker_network>>
+        SHAWK_DOCKER_IMAGE: <<parameters.docker_image>>
+        SHAWK_CONFIG_FILES: <<parameters.configuration_files>>
+        SHAWK_APP_ID: <<parameters.app_id>>
+        SHAWK_HOST: <<parameters.host>>
+        SHAWK_ENV: <<parameters.env>>
+        SHAWK_USERNAME: <<parameters.username>>
+        SHAWK_PASSWORD: <<parameters.password>>
+        SHAWK_AUTH_TOKEN: <<parameters.auth_token>>
+      command: <<include(scripts/scan_local.sh)>>

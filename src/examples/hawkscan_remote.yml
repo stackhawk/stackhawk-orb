@@ -3,7 +3,7 @@ description: |
   In this example, run a scan against a remote target host defined in `stackhawk.yml` at the base of the source
   repository.
 
-  Run stackhawk/hawkscan-remote with the configuration-files parameter, `stackhawk.yml stackhawk-circleci.yml`. This
+  Run stackhawk/hawkscan_remote with the configuration_files parameter, `stackhawk.yml stackhawk-circleci.yml`. This
   tells HawkScan to use the `stackhawk.yml` configuration file found at the base of the source repository, and to
   overlay it with configurations in `stackhawk-circleci.yml`.
 
@@ -17,6 +17,6 @@ usage:
   workflows:
     scan-remote:
       jobs:
-        - stackhawk/hawkscan-remote:
-            configuration-files: stackhawk.yml stackhawk-circleci.yml
+        - stackhawk/hawkscan_remote:
+            configuration_files: stackhawk.yml stackhawk-circleci.yml
             host: http://example.com
