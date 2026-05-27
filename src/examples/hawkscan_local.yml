@@ -2,7 +2,7 @@
 description: |
   In this example, run Nginx as a Docker container and scan it within the CircleCI build environment.
 
-  Run the `stackhawk/hawkscan-local` job with the parameter `docker-network: scan_net` to tell HawkScan to run on
+  Run the `stackhawk/hawkscan_local` job with the parameter `docker_network: scan_net` to tell HawkScan to run on
   the Docker named network, `scan_net`.
 
   Provide the parameter `steps` to do the following before the scan runs:
@@ -19,8 +19,8 @@ usage:
   workflows:
     scan-local:
       jobs:
-        - stackhawk/hawkscan-local:
-            docker-network: scan_net
+        - stackhawk/hawkscan_local:
+            docker_network: scan_net
             steps:
               - run:
                   name: Create scan_net Network
