@@ -100,15 +100,17 @@ working_directory: /home/steve/hawk
 
 steps:
   - checkout
-  - run:
-      name: Commit SHA check
-      environment:
-        SHAWK_COMMIT_SHA_CHECK: <<parameters.commit_sha_check>>
-        SHAWK_ORG_ID: <<parameters.organization_id>>
-        SHAWK_API_KEY_NAME: <<parameters.api_key>>
-        SHAWK_APP_ID: <<parameters.app_id>>
-        SHAWK_CONFIG_FILES: <<parameters.configuration_files>>
-      command: <<include(scripts/sha_check.sh)>>
+  - when:
+      condition: <<parameters.commit_sha_check>>
+      steps:
+        - run:
+            name: Commit SHA check
+            environment:
+              SHAWK_ORG_ID: <<parameters.organization_id>>
+              SHAWK_API_KEY_NAME: <<parameters.api_key>>
+              SHAWK_APP_ID: <<parameters.app_id>>
+              SHAWK_CONFIG_FILES: <<parameters.configuration_files>>
+            command: <<include(scripts/sha_check.sh)>>
   - run:
       name: HawkScan
       environment:

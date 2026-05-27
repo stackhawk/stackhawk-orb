@@ -1,18 +1,17 @@
 #!/usr/bin/env bash
-# Optional pre-scan dedup. When commit_sha_check is enabled, look up an existing
-# StackHawk scan tagged with the current commit SHA and, if one exists, skip the
-# scan (mirrors the hawkscan-action commitShaCheck). Relies on the scan being
-# tagged `_STACKHAWK_GIT_COMMIT_SHA: ${CIRCLE_SHA1}` in stackhawk.yml — the tag
-# the StackHawk platform actually indexes for commit lookups.
+# Optional pre-scan dedup. This script only runs when the commit_sha_check
+# parameter is true (gated by a `when:` condition in the job). It looks up an
+# existing StackHawk scan tagged with the current commit SHA and, if one exists,
+# skips the scan (mirrors the hawkscan-action commitShaCheck). Relies on the scan
+# being tagged `_STACKHAWK_GIT_COMMIT_SHA: ${CIRCLE_SHA1}` in stackhawk.yml — the
+# tag the StackHawk platform actually indexes for commit lookups.
 #
 # This is a safe dedup: any missing prerequisite falls back to a normal scan.
 # Note: unlike the GitHub Action it does NOT (yet) propagate the prior scan's
 # pass/fail threshold result — it only skips re-scanning.
 set -euo pipefail
 
-if [ "${SHAWK_COMMIT_SHA_CHECK:-false}" != "true" ]; then
-  exit 0
-fi
+echo "commit_sha_check: enabled; checking for an existing scan for this commit..."
 
 fallback() {
   echo "commit_sha_check: $1 Running a normal scan."
