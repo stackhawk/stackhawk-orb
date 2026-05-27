@@ -55,11 +55,12 @@ response=$(curl -sf -H "Authorization: Bearer ${token}" -H "Accept: application/
   "${api_base}/api/v1/scan/${org_id}?appIds=${app_id}&tag=_STACKHAWK_GIT_COMMIT_SHA:${commit_sha}*&sortDir=desc&pageSize=1") \
   || fallback "scan lookup request failed."
 
-total=$(printf '%s' "${response}" | sed -n -E 's/.*"totalCount"[[:space:]]*:[[:space:]]*([0-9]+).*/\1/p')
-case "${total}" in '' | *[!0-9]*) total=0 ;; esac
-
-if [ "${total}" -gt 0 ]; then
-  scan_id=$(printf '%s' "${response}" | sed -n -E 's/.*"scan":\{"id":"([0-9a-fA-F-]+)".*/\1/p' | head -1)
+# A matching scan carries the commit SHA as its tag value, so the SHA appears in
+# the response body only when a scan was found (the query params are not echoed).
+# This is more robust than parsing the JSON without jq.
+if printf '%s' "${response}" | grep -q "${commit_sha}"; then
+  scan_id=$(printf '%s' "${response}" \
+    | grep -oE '[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}' | head -1)
   echo "commit_sha_check: found an existing scan for commit ${commit_sha}; skipping the scan."
   [ -n "${scan_id}" ] && echo "View on StackHawk platform: https://app.stackhawk.com/scans/${scan_id}"
   circleci step halt
