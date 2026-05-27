@@ -17,12 +17,16 @@ on:
         required: true
         type: string
 
-permissions:
-  contents: write
-
 jobs:
   release:
     runs-on: ubuntu-latest
+    # SECURITY: gate the release behind a protected Environment with Required
+    # Reviewers, so a human approves before the tag/release is created. Create it
+    # in Settings -> Environments -> New environment -> "tag-release" -> add
+    # Required Reviewers. (Until configured, the job runs without the gate.)
+    environment: tag-release
+    permissions:
+      contents: write # create the GitHub Release + vX.Y.Z tag
     env:
       # Bind the (semi-trusted) dispatch input to an env var so it is never
       # interpolated directly into a run: script (avoids command injection).
