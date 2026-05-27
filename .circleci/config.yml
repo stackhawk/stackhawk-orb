@@ -19,7 +19,7 @@ workflows:
       - orb-tools/pack:
           filters: *filters
       - orb-tools/review:
-          orb_name: stackhawk/stackhawk
+          orb_name: stackhawk
           filters: *filters
       - orb-tools/continue:
           orb_name: stackhawk
