@@ -4,18 +4,28 @@ setup: true
 orbs:
   orb-tools: circleci/orb-tools@12.1.0
 
+# Run the setup pipeline on branch pushes AND on version tags, so that pushing a
+# vX.Y.Z tag flows through continue into the test-deploy production publish.
+filters: &filters
+  tags:
+    only: /.*/
+
 workflows:
   lint-pack:
     jobs:
       - orb-tools/lint:
           source_dir: ./src/
-      - orb-tools/pack
+          filters: *filters
+      - orb-tools/pack:
+          filters: *filters
       - orb-tools/review:
           orb_name: stackhawk/stackhawk
+          filters: *filters
       - orb-tools/continue:
           orb_name: stackhawk
           pipeline_number: << pipeline.number >>
           vcs_type: << pipeline.project.type >>
+          filters: *filters
           requires:
             - orb-tools/lint
             - orb-tools/pack

@@ -11,10 +11,20 @@ circleci orb pack src | circleci orb publish - stackhawk/stackhawk@dev:alpha
 
 ## Publishing a New Orb Version
 
-To publish a new version of this orb, open a PR to the `master` branch.
+This orb uses CircleCI's Orb Development Kit (orb-tools v12), which publishes
+production versions from **git tags**. Releases are driven entirely from GitHub
+via a manual workflow — no special commit messages or local tagging required.
 
-**IMPORTANT**: When you merge your PR, you must select squash merge and then add a merge commit message with `[semver:<patch|minor|major>]` in the message. The CircleCI workflow will interpret that as a patch, minor, or major release and will update the version accordingly.
+1. Merge your change to `master` (a normal merge is fine). On `master`, CI runs
+   lint, pack, review, and the integration scans, but does **not** publish.
+2. Cut the release from **Actions → "Release Orb" → Run workflow**, entering the
+   semver version (e.g. `2.0.1`, no `v` prefix).
 
-![squash merge](squashmerge.gif)
+The workflow creates a GitHub Release and a matching `vX.Y.Z` tag on `master`.
+That tag triggers the CircleCI setup pipeline, which continues into `test-deploy`
+and runs `orb-tools/publish` (production), publishing `stackhawk/stackhawk` at the
+tag's version.
 
-A normal merge will not give you the opportunity to update the merge commit message, which will default to something like "Merge pull request #12 from stackhawk/feature/bump".
+> The old `[semver:...]` merge-commit convention no longer applies — orb-tools
+> v12 reads the version from the `vX.Y.Z` tag, and the Release Orb workflow
+> creates that tag for you.

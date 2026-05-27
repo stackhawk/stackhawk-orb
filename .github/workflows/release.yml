@@ -1,0 +1,64 @@
+# Release the StackHawk Orb.
+#
+# Manual workflow_dispatch: enter a semver version and this creates a GitHub
+# Release and matching `vX.Y.Z` tag on master. Pushing that tag triggers the
+# CircleCI setup pipeline, which continues into test-deploy and runs
+# orb-tools/publish (production) — publishing stackhawk/stackhawk@X.Y.Z.
+#
+# Nothing here publishes the orb directly; the tag drives the CircleCI publish
+# we maintain in .circleci/test-deploy.yml. No special commit messages required.
+name: Release Orb
+
+on:
+  workflow_dispatch:
+    inputs:
+      version:
+        description: "Version to release — semver, no 'v' prefix (e.g. 2.0.0)"
+        required: true
+        type: string
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    # SECURITY: gate the release behind a protected Environment with Required
+    # Reviewers, so a human approves before the tag/release is created. Create it
+    # in Settings -> Environments -> New environment -> "tag-release" -> add
+    # Required Reviewers. (Until configured, the job runs without the gate.)
+    environment: tag-release
+    permissions:
+      contents: write # create the GitHub Release + vX.Y.Z tag
+    env:
+      # Bind the (semi-trusted) dispatch input to an env var so it is never
+      # interpolated directly into a run: script (avoids command injection).
+      VERSION: ${{ inputs.version }}
+    steps:
+      - name: Validate version
+        run: |
+          if ! printf '%s' "$VERSION" | grep -qE '^[0-9]+\.[0-9]+\.[0-9]+$'; then
+            echo "::error::Version must be semver X.Y.Z with no 'v' prefix (got '$VERSION')."
+            exit 1
+          fi
+
+      - name: Checkout master
+        uses: actions/checkout@v4
+        with:
+          ref: master
+          fetch-depth: 0
+
+      - name: Create GitHub Release and tag
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          tag="v${VERSION}"
+          if gh release view "$tag" --repo "$GITHUB_REPOSITORY" >/dev/null 2>&1; then
+            echo "::error::Release $tag already exists."
+            exit 1
+          fi
+          notes="Published to the orb registry by CircleCI from this tag."
+          notes="${notes} See CHANGELOG.md and MIGRATION.md."
+          gh release create "$tag" \
+            --repo "$GITHUB_REPOSITORY" \
+            --target master \
+            --title "$tag" \
+            --notes "$notes"
+          echo "Created ${tag} — CircleCI will publish stackhawk/stackhawk@${VERSION} from the tag."
