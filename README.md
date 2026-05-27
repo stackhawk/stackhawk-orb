@@ -39,7 +39,8 @@ your `.circleci/config.yml` when upgrading:
 
 (`host`, `env`, `username`, `password`, `color`, and `steps` are unchanged.)
 
-See [`CHANGELOG.md`](CHANGELOG.md) for the full list and an example.
+See [`MIGRATION.md`](MIGRATION.md) for the full 1.x → 2.0.0 migration guide and
+[`CHANGELOG.md`](CHANGELOG.md) for release notes.
 
 ## Need Help?
 If you have questions or need some help, please email us at support@stackhawk.com.
