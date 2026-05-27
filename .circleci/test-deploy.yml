@@ -13,9 +13,9 @@ workflows:
     jobs:
       # ---- Integration smoke tests against the injected dev orb ----
       - stackhawk/hawkscan_local:
-          app-id: f11fa0b4-5763-4266-9ef4-786d82817b8b
+          app_id: f11fa0b4-5763-4266-9ef4-786d82817b8b
           env: "Development"
-          docker-network: scannet
+          docker_network: scannet
           host: http://nginxtest
           filters: *filters
           steps:
@@ -26,7 +26,7 @@ workflows:
                 name: Run nginxtest on scannet
                 command: docker run --rm --detach --network scannet --name nginxtest nginx
       - stackhawk/hawkscan_remote:
-          app-id: 095bcf6b-85ef-4b9b-b512-aae0f10fc344
+          app_id: 095bcf6b-85ef-4b9b-b512-aae0f10fc344
           env: "Development"
           host: http://example.com
           filters: *filters

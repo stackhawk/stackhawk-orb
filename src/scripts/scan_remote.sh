@@ -5,7 +5,7 @@
 set -euo pipefail
 
 # Defer key expansion to BASH_ENV so the secret value is never echoed here:
-# api-key is an env_var_name parameter, so write a reference to that variable.
+# api_key is an env_var_name parameter, so write a reference to that variable.
 {
   echo "export API_KEY=\${${SHAWK_API_KEY_NAME}}"
   echo "export NO_COLOR=${SHAWK_NO_COLOR}"

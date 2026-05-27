@@ -6,21 +6,38 @@ All notable changes to the StackHawk CircleCI orb are documented here.
 
 ### Breaking changes
 
-- **Renamed jobs to snake_case** to conform to CircleCI orb naming conventions
-  (orb-tools `review` rule RC010):
+- **Renamed jobs *and* parameters to snake_case** to conform to CircleCI orb
+  naming conventions (orb-tools `review` rule RC010).
+
+  Jobs:
   - `stackhawk/hawkscan-local` → `stackhawk/hawkscan_local`
   - `stackhawk/hawkscan-remote` → `stackhawk/hawkscan_remote`
 
-  **Migration:** update the job names in your `.circleci/config.yml`. Job
-  *parameters* are unchanged (e.g. `docker-network`, `app-id`, `configuration-files`).
+  Parameters (both jobs):
+  - `api-key` → `api_key`
+  - `configuration-files` → `configuration_files`
+  - `docker-network` → `docker_network` (hawkscan_local)
+  - `app-id` → `app_id`
+  - `auth-token` → `auth_token`
+  - `docker-image` → `docker_image`
+  - `resource-class` → `resource_class` (hawkscan_remote)
+
+  (`host`, `env`, `username`, `password`, `color`, `steps` are unchanged.)
+
+  **Migration:** update the job name and any kebab-case parameters in your
+  `.circleci/config.yml`:
 
   ```yaml
   # before
   - stackhawk/hawkscan-local:
       docker-network: scan_net
+      app-id: <your-app-id>
+      configuration-files: stackhawk.yml
   # after
   - stackhawk/hawkscan_local:
-      docker-network: scan_net
+      docker_network: scan_net
+      app_id: <your-app-id>
+      configuration_files: stackhawk.yml
   ```
 
 ### Changed

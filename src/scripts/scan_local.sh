@@ -4,7 +4,7 @@
 # `environment:` block (which is where orb parameter interpolation happens).
 set -euo pipefail
 
-# api-key is an env_var_name parameter: SHAWK_API_KEY_NAME holds the NAME of
+# api_key is an env_var_name parameter: SHAWK_API_KEY_NAME holds the NAME of
 # the variable that stores the key, so resolve it indirectly.
 api_key_value="${!SHAWK_API_KEY_NAME}"
 
