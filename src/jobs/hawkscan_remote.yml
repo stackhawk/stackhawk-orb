@@ -80,6 +80,18 @@ parameters:
       https://circleci.com/docs/2.0/configuration-reference/#resourceclass .
     type: string
     default: medium
+  commit_sha_check:
+    description: >
+      If `true`, check the StackHawk platform for an existing scan tagged with the current commit SHA
+      (CIRCLE_SHA1) before scanning, and skip the scan if one is found. Requires `organization_id` and
+      a `_STACKHAWK_GIT_COMMIT_SHA: ${CIRCLE_SHA1}` tag in your stackhawk.yml.
+    type: boolean
+    default: false
+  organization_id:
+    description: >
+      Your StackHawk organization ID. Required when `commit_sha_check` is `true` (used for the scan lookup).
+    type: string
+    default: ""
 
 environment:
   REPO_DIR: /home/steve/hawk
@@ -88,6 +100,15 @@ working_directory: /home/steve/hawk
 
 steps:
   - checkout
+  - run:
+      name: Commit SHA check
+      environment:
+        SHAWK_COMMIT_SHA_CHECK: <<parameters.commit_sha_check>>
+        SHAWK_ORG_ID: <<parameters.organization_id>>
+        SHAWK_API_KEY_NAME: <<parameters.api_key>>
+        SHAWK_APP_ID: <<parameters.app_id>>
+        SHAWK_CONFIG_FILES: <<parameters.configuration_files>>
+      command: <<include(scripts/sha_check.sh)>>
   - run:
       name: HawkScan
       environment:

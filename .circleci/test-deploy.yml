@@ -17,6 +17,8 @@ workflows:
           env: "Development"
           docker_network: scannet
           host: http://nginxtest
+          commit_sha_check: true
+          organization_id: c2e20751-e8d9-4654-83a5-e5d6ee799047
           filters: *filters
           steps:
             - run:
@@ -29,6 +31,8 @@ workflows:
           app_id: 095bcf6b-85ef-4b9b-b512-aae0f10fc344
           env: "Development"
           host: http://example.com
+          commit_sha_check: true
+          organization_id: c2e20751-e8d9-4654-83a5-e5d6ee799047
           filters: *filters
 
       # ---- Re-pack from source so publish has the orb file ----
