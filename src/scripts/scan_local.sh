@@ -30,6 +30,11 @@ append_env USERNAME "${SHAWK_USERNAME}"
 append_env PASSWORD "${SHAWK_PASSWORD}"
 append_env AUTH_TOKEN "${SHAWK_AUTH_TOKEN}"
 
+# Expose CircleCI's commit metadata so stackhawk.yml can resolve git tags
+# (e.g. _STACKHAWK_GIT_COMMIT_SHA: ${CIRCLE_SHA1}) for commit-status/PR checks.
+append_env CIRCLE_SHA1 "${CIRCLE_SHA1:-}"
+append_env CIRCLE_BRANCH "${CIRCLE_BRANCH:-}"
+
 docker_args+=("${SHAWK_DOCKER_IMAGE}")
 
 # SHAWK_CONFIG_FILES is a space-separated list and must word-split.
